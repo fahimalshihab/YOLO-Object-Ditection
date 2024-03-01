@@ -4,9 +4,11 @@ import cvzone
 import math
 
 
-cap = cv2.VideoCapture(0)
-cap.set(3,1280)
-cap.set(4,720)
+#cap = cv2.VideoCapture(0) #for webcam
+#cap.set(3,1280)
+#cap.set(4,720)
+
+cap = cv2.VideoCapture("../Videos/v2.mp4")
 
 model = YOLO("../Yolo-Weight/yolov8n.pt")
 
@@ -42,7 +44,11 @@ while True:
 
             # Class name
             cls =int(box.cls[0])
-            cvzone.putTextRect(img,f'{classNames[cls]} {conf}',(max(0,x1),max(35,y1)),scale=0.7,thickness=1)
+            currentClass = classNames[cls]
 
+            if currentClass == "car":
+
+                cvzone.putTextRect(img,f'{classNames[cls]} {conf}',(max(0,x1),max(35,y1)),scale=1,thickness=2,offset=3)
+    img = cv2.resize(img, (1000, 800))
     cv2.imshow("Image",img)
     cv2.waitKey(1)
