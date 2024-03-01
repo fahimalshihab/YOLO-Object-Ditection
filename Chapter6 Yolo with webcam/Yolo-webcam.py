@@ -8,7 +8,7 @@ import math
 #cap.set(3,1280)
 #cap.set(4,720)
 
-cap = cv2.VideoCapture("../Videos/v2.mp4")
+cap = cv2.VideoCapture("../v2.mp4")
 
 model = YOLO("../Yolo-Weight/yolov8n.pt")
 
