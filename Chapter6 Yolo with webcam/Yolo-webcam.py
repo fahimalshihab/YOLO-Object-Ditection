@@ -4,11 +4,11 @@ import cvzone
 import math
 
 
-#cap = cv2.VideoCapture(0) #for webcam
-#cap.set(3,1280)
-#cap.set(4,720)
+cap = cv2.VideoCapture(0) #for webcam
+cap.set(3,1280)
+cap.set(4,720)
 
-cap = cv2.VideoCapture("../v2.mp4")
+#cap = cv2.VideoCapture("../Videos/v2.mp4")
 
 model = YOLO("../Yolo-Weight/yolov8n.pt")
 
@@ -23,9 +23,11 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
               "teddy bear", "hair drier", "toothbrush"
 ]
-
+#mask = cv2.imread("mask.jpg")
 while True:
     succes, img = cap.read()
+    #imgRegion = cv2.bitwise_and(img,mask)
+
     results = model(img,stream=True)
     for r in results:
         boxes = r.boxes
@@ -46,9 +48,13 @@ while True:
             cls =int(box.cls[0])
             currentClass = classNames[cls]
 
-            if currentClass == "car":
+           # if currentClass == "car" or currentClass == "truck" or currentClass == "bus" or currentClass == "motorbike" and conf> 0.3:
 
-                cvzone.putTextRect(img,f'{classNames[cls]} {conf}',(max(0,x1),max(35,y1)),scale=1,thickness=2,offset=3)
-    img = cv2.resize(img, (1000, 800))
+            cvzone.putTextRect(img,f'{classNames[cls]} {conf}',(max(0,x1),max(35,y1)),scale=2,thickness=2,offset=3)
+            cvzone.cornerRect(img, (x1, y1, w, h),l=9)
+
+   # img = cv2.resize(img, (1000, 800))
     cv2.imshow("Image",img)
+    #cv2.imshow("ImageRegion",imgRegion)
+
     cv2.waitKey(1)
